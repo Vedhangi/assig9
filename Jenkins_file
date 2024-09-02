@@ -22,13 +22,13 @@ pipeline {
         stage('Build') {
             steps {
                 dir('assig9') {
+                    // Corrected build command, assuming Dockerfile is in the 'assig9' directory
                     bat 'docker build -t mca2312/assig9 .'
                 }
             }
         }
         stage('Login') {
             steps {
-                // Login to Docker Hub using hardcoded credentials
                 bat "echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin"
             }
         }
