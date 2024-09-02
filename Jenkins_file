@@ -41,3 +41,4 @@ bat 'docker run -d --name my_container mca2312/assig9'
 }
 }
 }
+}
