@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('assig9') {
                     // Corrected build command, assuming Dockerfile is in the 'assig9' directory
-                    bat 'docker build -t mca2312/assig9 .'
+                    bat 'docker build -t mca2312/assig9 -f Dockerfile .'
                 }
             }
         }
