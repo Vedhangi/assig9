@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables for Docker credentials and image
-        DOCKERHUB_CREDENTIALS = credentials(‘6b3acb82-3f49-4880-8114-a2674ea264c8')
+        DOCKERHUB_CREDENTIALS = credentials('6b3acb82-3f49-4880-8114-a2674ea264c8')
         IMAGE_NAME = mca2312/assig9
     }
 
