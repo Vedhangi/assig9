@@ -22,7 +22,7 @@ dir('assig9'){
 bat 'docker build -t mca2312/assig9 Dockerfile .'
 }
 }
-]
+}
 stage('Login'){
 steps{
 bat 'docker login -u "mca2312" -p "docker09*" docker.io'
@@ -32,7 +32,7 @@ stage('Push'){
 steps{
 bat 'docker push mca2312/assig9'
 }
-]
+}
 stage('Run in Daemon Mode'){
 steps{
 bat 'docker rm-f my_container'
