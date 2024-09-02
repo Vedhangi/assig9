@@ -1,7 +1,7 @@
 pipeline{
   agent any
   environment 
-  PATH="C:\Program Files\Docker\Docker\resources\bin;$a{env.PATH}"
+  PATH="C:\\Program Files\\Docker\\Docker\\resources\\bin;$a{env.PATH}"
 }
 stages {
 stage('Clean and Clone Repository'){
