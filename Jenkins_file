@@ -1,44 +1,47 @@
 pipeline {
-  agent any
-  environment {
-  PATH="C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
-}
-stages {
-stage('Clean and Clone Repository'){
-steps {
-cleanWs()
-bat 'https://github.com/Vedhangi/assig9.git'
-}
-stage('List Files'){
-steps {
-dir('assig9'){
-bat 'dir'
-}
-}
-}
-stage('Build'){
-steps {
-dir('assig9'){
-bat 'docker build -t mca2312/assig9 Dockerfile .'
-}
-}
-}
-stage('Login'){
-steps{
-bat 'docker login -u "mca2312" -p "docker09*" docker.io'
-}
-}
-stage('Push'){
-steps{
-bat 'docker push mca2312/assig9'
-}
-}
-stage('Run in Daemon Mode'){
-steps{
-bat 'docker rm-f my_container'
-bat 'docker run -d --name my_container mca2312/assig9'
-}
-}
-}
-}
+    agent any
+    environment {
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+        DOCKER_USERNAME = 'mca2312'      // Your Docker username
+        DOCKER_PASSWORD = 'docker09*'    // Your Docker password
+    }
+    stages {
+        stage('Clean and Clone Repository') {
+            steps {
+                cleanWs()
+                bat 'git clone https://github.com/Vedhangi/assig9.git'
+            }
+        }
+        stage('List Files') {
+            steps {
+                dir('assig9') {
+                    bat 'dir'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('assig9') {
+                    bat 'docker build -t mca2312/assig9 .'
+                }
+            }
+        }
+        stage('Login') {
+            steps {
+                // Login to Docker Hub using hardcoded credentials
+                bat "echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin"
+            }
+        }
+        stage('Push') {
+            steps {
+                bat 'docker push mca2312/assig9'
+            }
+        }
+        stage('Run in Daemon Mode') {
+            steps {
+                bat 'docker rm -f my_container || true'
+                bat 'docker run -d --name my_container mca2312/assig9'
+            }
+        }
+    }
 }
