@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define environment variables for Docker credentials and image
         DOCKERHUB_CREDENTIALS = credentials('6b3acb82-3f49-4880-8114-a2674ea264c8')
-        IMAGE_NAME = mca2312/assig9
+        IMAGE_NAME = 'mca2312/assig9'
     }
 
     stages {
@@ -12,7 +12,7 @@ pipeline {
             steps {
                 // Clean workspace and clone the repository
                 cleanWs()
-                git url: https://github.com/Vedhangi/assig9.git', branch: 'main'
+                git url: 'https://github.com/Vedhangi/assig9.git', branch: 'main'
             }
         }
 
@@ -34,7 +34,11 @@ pipeline {
             steps {
                 // Login to Docker Hub using credentials from Jenkins
                 script {
-                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
+                    withCredentials([usernamePassword(credentialsId: '6b3acb82-3f49-4880-8114-a2674ea264c8', 
+                      usernameVariable: 'DOCKER_USERNAME', 
+                      passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                    }
                 }
             }
         }
@@ -59,8 +63,7 @@ pipeline {
             // Cleanup Docker images and containers to save space
             sh 'docker stop my-app-container || true'
             sh 'docker rm my-app-container || true'
-            sh 'docker rmi ${env.IMAGE_NAME} || true'
+            sh "docker rmi ${env.IMAGE_NAME} || true"
         }
     }
 }
-
