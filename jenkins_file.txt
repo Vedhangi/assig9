@@ -1,27 +1,65 @@
 pipeline {
     agent any
+
+    environment {
+        // Define environment variables for Docker credentials and image
+        DOCKERHUB_CREDENTIALS = credentials(‘6b3acb82-3f49-4880-8114-a2674ea264c8')
+        IMAGE_NAME = mca2312/assig9
+    }
+
     stages {
-        stage('Checkout') {
+        stage('Clean Workspace and Clone Repository') {
             steps {
-                // Checkout code from public GitHub repository
-                git url: 'https://github.com/Vedhangi/assig9.git'
+                // Clean workspace and clone the repository
+                cleanWs()
+                git url: https://github.com/Vedhangi/assig9.git', branch: 'main'
             }
         }
+
+        stage('List Files') {
+            steps {
+                // List files in the workspace
+                sh 'ls -la'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
+                // Build the Docker image
+                sh "docker build -t ${env.IMAGE_NAME} ."
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                // Login to Docker Hub using credentials from Jenkins
                 script {
-                    // Build Docker image
-                    sh 'docker build -t mca2312/assig9 .'
+                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
                 }
             }
         }
-        stage('Run Docker Container') {
+
+        stage('Push Docker Image') {
             steps {
-                script {
-                    // Run Docker container in detached mode
-                    sh 'docker run -d --name myapp-container mca2312/assig9'
-                }
+                // Push the Docker image to Docker Hub
+                sh "docker push ${env.IMAGE_NAME}"
             }
+        }
+
+        stage('Run Docker Container in Daemon Mode') {
+            steps {
+                // Run the Docker container in daemon mode
+                sh "docker run -d --name my-app-container -p 5000:5000 ${env.IMAGE_NAME}"
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup Docker images and containers to save space
+            sh 'docker stop my-app-container || true'
+            sh 'docker rm my-app-container || true'
+            sh 'docker rmi ${env.IMAGE_NAME} || true'
         }
     }
 }
