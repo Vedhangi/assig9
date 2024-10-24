@@ -3,7 +3,7 @@ pipeline {
     environment {
         PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
         DOCKER_USERNAME = 'mca2312'      // Your Docker username
-        DOCKER_PASSWORD = 'docker09*'    // Your Docker password
+        DOCKER_PASSWORD = 'mca092312'    // Your Docker password
     }
     stages {
         stage('Clean and Clone Repository') {
