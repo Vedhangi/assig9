@@ -14,16 +14,16 @@ pipeline {
         }
         stage('List Files') {
             steps {
-                dir('sample3') {
+                dir('assig9') {
                     bat 'dir'
                 }
             }
         }
         stage('Build') {
             steps {
-                dir('sample3') {
+                dir('assig9') {
                     // Corrected build command, assuming Dockerfile is in the 'assig9' directory
-                    bat 'docker build -t mca2312/sample3 -f Dockerfile .'
+                    bat 'docker build -t mca2312/assig9 -f Dockerfile .'
                 }
             }
         }
@@ -34,13 +34,13 @@ pipeline {
         }
         stage('Push') {
             steps {
-                bat 'docker push mca2312/sample3'
+                bat 'docker push mca2312/assig9'
             }
         }
         stage('Run in Daemon Mode') {
             steps {
                 bat 'docker rm -f my_container || true'
-                bat 'docker run -d --name my_container mca2312/sample3'
+                bat 'docker run -d --name my_container mca2312/assig9'
             }
         }
     }
