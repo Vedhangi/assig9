@@ -14,14 +14,14 @@ pipeline {
         }
         stage('List Files') {
             steps {
-                dir('assig9') {
+                dir('sample3') {
                     bat 'dir'
                 }
             }
         }
         stage('Build') {
             steps {
-                dir('assig9') {
+                dir('sample3') {
                     // Corrected build command, assuming Dockerfile is in the 'assig9' directory
                     bat 'docker build -t mca2312/sample3 -f Dockerfile .'
                 }
