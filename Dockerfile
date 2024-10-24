@@ -1,16 +1,11 @@
-# Use an appropriate base image
-FROM python:3.9
+FROM ubuntu
 
-# Set the working directory
-WORKDIR /app
+RUN apt-get update 
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN apt-get install -y python3-flask
 
-# Copy the application files
-COPY . .
+COPY . /opt/source-code
 
-# Install dependencies
-RUN pip install -r requirements.txt
-
-# Command to run your application
-CMD ["python", "app.py"]
-
+ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
 
